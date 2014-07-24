@@ -3,9 +3,22 @@
 <head>
     <title></title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="jailBird.js"></script>
+    <script>
+        var player1 = new JailBird('player1');
+    </script>
 </head>
 <body>
-<div class="jailbird stance"></div>
-<div class="jailbird reverse stance"></div>
+<!--<div class="jailbird stance"></div>-->
+<!--<div class="jailbird reverse stance"></div>-->
+<!--<div class="jailbird turn"></div>-->
+<ol>
+    <li><a href="javascript:player1.play('turn')">turn</a></li>
+    <li><a href="javascript:player1.play('duck')">duck</a></li>
+    <li><a href="javascript:player1.play('duckTurn')">duck turn</a></li>
+    <li><a href="javascript:player1.play('walk')">walk</a></li>
+    <li><a href="javascript:player1.reverse(!player1.reverse())">reverse</a></li>
+</ol>
+<div class="player1"></div>
 </body>
 </html>
