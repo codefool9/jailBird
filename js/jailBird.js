@@ -11,8 +11,8 @@ function JailBird(clsName) {
         frames = {
             stance: {
                 frames: [
-                    {x: -20, y: -10, width: defaultWidth, height: defaultHeight},
-                    {x: -20 - defaultWidth, y: -10, width: defaultWidth, height: defaultHeight},
+                    {x: -20,                    y: -10, width: defaultWidth, height: defaultHeight},
+                    {x: -20 - defaultWidth,     y: -10, width: defaultWidth, height: defaultHeight},
                     {x: -20 - defaultWidth * 2, y: -10, width: defaultWidth, height: defaultHeight},
                     {x: -20 - defaultWidth * 3, y: -10, width: defaultWidth, height: defaultHeight},
                     {x: -20 - defaultWidth * 4, y: -10, width: defaultWidth, height: defaultHeight},
@@ -51,16 +51,22 @@ function JailBird(clsName) {
                 ]
             },
             walk: {
+                start: function () {
+                    speed = reverse ? -10 : 10;
+                },
+                end: function () {
+                    speed = 0;
+                },
                 frames: [
-                    {x: -1639, y: -7, width: 72, height: 108},
-                    {x: -1710, y: -7, width: 72, height: 108},
-                    {x: -1781, y: -7, width: 72, height: 108},
-                    {x: -1852, y: -7, width: 72, height: 108},
-                    {x: -1923, y: -7, width: 72, height: 108},
-                    {x: -1994, y: -7, width: 79, height: 108},
-                    {x: -2072, y: -7, width: 73, height: 108},
-                    {x: -2218, y: -7, width: 72, height: 108},
-                    {x: -2289, y: -7, width: 72, height: 108}
+                    {x: -1639, y: -7, width: 72, height: 108, oy: -4},
+                    {x: -1710, y: -7, width: 72, height: 108, oy: -4},
+                    {x: -1781, y: -7, width: 72, height: 108, oy: -4},
+                    {x: -1852, y: -7, width: 72, height: 108, oy: -4},
+                    {x: -1923, y: -7, width: 72, height: 108, oy: -4},
+                    {x: -1994, y: -7, width: 79, height: 108, oy: -4},
+                    {x: -2072, y: -7, width: 73, height: 108, oy: -4},
+                    {x: -2218, y: -7, width: 72, height: 108, oy: -4},
+                    {x: -2289, y: -7, width: 72, height: 108, oy: -4}
                 ]
             }
         },
@@ -68,6 +74,7 @@ function JailBird(clsName) {
         index = 0,
         wait = 0,
         repeat = 0,
+        speed = 0,
         el;
 
     this.name = clsName;
@@ -137,6 +144,10 @@ function JailBird(clsName) {
             fms = t.frames;
         }
         f = fms[index];
+        if (index === 0 && t.start) {
+            t.start();
+        }
+        x += speed;
         if (!el) {
             el = document.getElementsByClassName(clsName)[0];
             el.style.position = 'absolute';
@@ -151,13 +162,16 @@ function JailBird(clsName) {
             el.style.backgroundPosition = f.x + "px " + f.y + "px";
             el.style.width = f.width + 'px';
             el.style.height = f.height + 2 + 'px'; // add a little just below the height so toes don't get cut off.
-            el.style.top = y - f.height + 'px';
+            el.style.top = y + (f.oy || 0) - f.height + 'px';
             el.style.left = x + (f.ox || 0) + 'px';
         }
         if (f.wait && wait < f.wait) {
             wait += 1;
         } else {
             index += 1;
+        }
+        if (index === fms.length && t.end) {
+            t.end();
         }
     }
 }
