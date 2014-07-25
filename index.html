@@ -4,8 +4,16 @@
     <title></title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script src="js/jailBird.js"></script>
+    <script src="js/control.js"></script>
     <script>
         var player1 = new JailBird('player1');
+        player1.x(400);
+
+        var player2 = new JailBird('player2');
+        player2.reverse(true);
+        player2.x(600);
+        control(player1, {up: 84, left: 65, down: 63, right: 68}); //wasd
+        control(player2, {up: 38, down: 40, left: 37, right: 39}); //up,down,left,right
     </script>
 </head>
 <body>
@@ -16,6 +24,15 @@
     <li><a href="javascript:player1.play('walk')">walk</a></li>
     <li><a href="javascript:player1.reverse(!player1.reverse())">reverse</a></li>
 </ol>
+<ol style="position: absolute; top:0px; right: 0px; text-align: right;">
+    <li><a href="javascript:player2.play('turn')">turn</a></li>
+    <li><a href="javascript:player2.play('duck')">duck</a></li>
+    <li><a href="javascript:player2.play('duckTurn')">duck turn</a></li>
+    <li><a href="javascript:player2.play('walk')">walk</a></li>
+    <li><a href="javascript:player2.reverse(!player2.reverse())">reverse</a></li>
+
+</ol>
 <div class="player1"></div>
+<div class="player2"></div>
 </body>
 </html>
