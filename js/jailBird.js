@@ -70,6 +70,8 @@ function JailBird(clsName) {
         repeat = 0,
         el;
 
+    this.name = clsName;
+
     this.y = function (value) {
         if (value !== undefined) {
             y = value;
