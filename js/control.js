@@ -17,6 +17,7 @@ function control (player,keys) {
             player.play('walk');
         } else if (event.keyCode === keys.up) {
             console.log(player.name + "jump");
+            player.play('jump')
         } else if (event.keyCode === keys.down) {
             console.log(player.name + "down");
             player.play('duck');

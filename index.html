@@ -3,6 +3,7 @@
 <head>
     <title></title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="js/characters/jailBird/jailBird.css">
     <script src="js/AniSprite.js"></script>
     <script src="js/characters/jailBird/jailBird.js"></script>
@@ -10,10 +11,12 @@
     <script>
         ani.engine.start(30);
         var player1 = ani.jailBird('player1');
+        player1.ground = 100;
         player1.x = 400;
 
         var player2 = ani.jailBird('player2');
         player2.reverse = true;
+        player2.y = 0
         player2.x = 600;
         control(player1, {up: 87, left: 65, down: 83, right: 68}); //wasd
         control(player2, {up: 38, down: 40, left: 37, right: 39}); //up,down,left,right
@@ -37,7 +40,9 @@
     <li><a href="javascript:player2.reverse = !player2.reverse">reverse</a></li>
     <li><a href="javascript:player2.restoreDefault()">Restore Default</a></li>
 </ol>
-<div class="player1"></div>
-<div class="player2"></div>
+<div class="stage">
+    <div class="player1"></div>
+    <div class="player2"></div>
+</div>
 </body>
 </html>
