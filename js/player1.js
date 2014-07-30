@@ -151,12 +151,22 @@ player1.on('strike', function (event, name, spot) {
     //TODO: need to implement damage and momentum for each action here.
     if (name === "lightPunch") {
         damage = 10;
-        momentum = 10 + Math.abs(player1.speed);
+        momentum = 10;
+    } else if (name === "hardPunch") {
+        damage = 20;
+        momentum = 20;
+    } else if (name === "spinKick") {
+        damage = 30;
+        momentum = 50;
+    } else if (name === "knifeHardPunch") {
+        damage = 20;
+        momentum = 20;
     }
-
     if (player2.checkHit(spot, damage, momentum)) {
         player2.play('hitFace');
         player2.damage += damage;
         player2.momentum = momentum;
     }
 });
+
+player1.ground = 200;

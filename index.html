@@ -8,36 +8,6 @@
     <script src="js/characters/jailBird/jailBird.js"></script>
     <script src="js/player1.js"></script>
     <script src="js/player2.js"></script>
-    <style>
-        .block {
-            display: inline-block;
-            vertical-align: top;
-        }
-        .strike {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 10px;
-            height: 10px;
-            background-color: rgba(0, 255, 0, 0.5);
-            z-index: 100;
-        }
-        .weakSpot {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 10px;
-            height: 10px;
-            background-color: rgba(255, 0, 0, 0.5);
-            z-index: 100;
-        }
-        .stepFrame {
-            float: right;
-        }
-        .jailBird.black {
-            background: url(js/characters/jailBird/jailBird-sprite-black.png) no-repeat;
-        }
-    </style>
     <script>
         ani.engine.start(30);
 
@@ -51,8 +21,8 @@
 
         function writeOptions(player, controlsClass, animationClass) {
             var i, item,
-                controls = document.getElementsByClassName(controlsClass)[0],
-                animations = document.getElementsByClassName(animationClass)[0];
+                    controls = document.getElementsByClassName(controlsClass)[0],
+                    animations = document.getElementsByClassName(animationClass)[0];
 
             for (i in player.actions) {
                 item = player.actions[i];
@@ -66,6 +36,10 @@
     </script>
 </head>
 <body onload="writeOptions(player1, 'player1Instructions', 'player1Animations')">
+<div class="stage">
+    <div class="player2 black"></div>
+    <div class="player1"></div>
+</div>
 <ul class="stepFrame">
     <li><a href="javascript:ani.engine.start(prompt('Enter Frames Per Second:'))">FPS</a></li>
     <li><a href="javascript:ani.engine.stop()">Stop</a></li>
@@ -75,19 +49,19 @@
 <div class="weakSpot high"></div>
 <div class="weakSpot mid"></div>
 <div class="weakSpot low"></div>
-<div class="block">
-    <div>Instructions</div>
-    <ol class="player1Instructions">
-    </ol>
-</div>
-<div class="block">
-    <div>Animations</div>
-    <ol class="player1Animations">
-        <li><a href="javascript:player1.reverse = !player1.reverse">reverse</a></li>
-        <li><a href="javascript:player1.restoreDefault()">Restore Default</a></li>
-    </ol>
-    <div class="player2 black"></div>
-    <div class="player1"></div>
+<div class="info">
+    <div class="block">
+        <div>Instructions</div>
+        <ol class="player1Instructions">
+        </ol>
+    </div>
+    <div class="block">
+        <div>Animations</div>
+        <ol class="player1Animations">
+            <li><a href="javascript:player1.reverse = !player1.reverse">reverse</a></li>
+            <li><a href="javascript:player1.restoreDefault()">Restore Default</a></li>
+        </ol>
+    </div>
 </div>
 </body>
 </html>

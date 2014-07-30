@@ -1,5 +1,49 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+}
+
 .stage {
+    position: absolute;
     margin-top: 0px;
+    width: 100%;
     height: 224px;
     background-image: url("../images/backgrounds/background13-1.gif");
+}
+
+.info {
+    position: absolute;
+    top: 224px;
+    font-size: 10px;
+}
+
+.block {
+    display: inline-block;
+    vertical-align: top;
+}
+.strike {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(0, 255, 0, 0.5);
+    z-index: 100;
+}
+.weakSpot {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255, 0, 0, 0.5);
+    z-index: 100;
+}
+.stepFrame {
+    float: right;
+}
+.jailBird.black {
+    background: url(../js/characters/jailBird/jailBird-sprite-black.png) no-repeat;
 }
