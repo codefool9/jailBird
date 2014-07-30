@@ -2,47 +2,92 @@
 <html>
 <head>
     <title></title>
-    <link rel="stylesheet" type="text/css" href="css/styles.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="js/characters/jailBird/jailBird.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="js/AniSprite.js"></script>
     <script src="js/characters/jailBird/jailBird.js"></script>
-    <script src="js/control.js"></script>
+    <script src="js/player1.js"></script>
+    <script src="js/player2.js"></script>
+    <style>
+        .block {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .strike {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(0, 255, 0, 0.5);
+            z-index: 100;
+        }
+        .weakSpot {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 0, 0, 0.5);
+            z-index: 100;
+        }
+        .stepFrame {
+            float: right;
+        }
+        .jailBird.black {
+            background: url(js/characters/jailBird/jailBird-sprite-black.png) no-repeat;
+        }
+    </style>
     <script>
         ani.engine.start(30);
-        var player1 = ani.jailBird('player1');
-        player1.ground = 100;
-        player1.x = 400;
 
-        var player2 = ani.jailBird('player2');
-        player2.reverse = true;
-        player2.y = 0
-        player2.x = 600;
-        control(player1, {up: 87, left: 65, down: 83, right: 68}); //wasd
-        control(player2, {up: 38, down: 40, left: 37, right: 39}); //up,down,left,right
+        function posSpot(el, spot) {
+            el.style.left = spot.x - spot.radius + 'px';
+            el.style.top = spot.y - spot.radius + 'px';
+            el.style.width = spot.radius * 2 + 'px';
+            el.style.height = spot.radius * 2 + 'px';
+            el.style.borderRadius = spot.radius + 'px';
+        }
 
-        function writeOptions(player, clsName) {
-            var i, ol = document.getElementsByClassName(clsName)[0];
-            for (i in window[player].frames) {
-                ol.innerHTML += "<li><a href=\"javascript:" + player + ".play('" + i + "')\">" + i + "</a></li>";
+        function writeOptions(player, controlsClass, animationClass) {
+            var i, item,
+                controls = document.getElementsByClassName(controlsClass)[0],
+                animations = document.getElementsByClassName(animationClass)[0];
+
+            for (i in player.actions) {
+                item = player.actions[i];
+                controls.innerHTML += "<li>" + item.letter + " = " + i + "</li>"
+            }
+
+            for (i in player.frames) {
+                animations.innerHTML += "<li>" + i + "</li>";
             }
         }
     </script>
 </head>
-<body onload="writeOptions('player1', 'player1Controls');writeOptions('player2', 'player2Controls')">
-
-<ol class="player1Controls" style="float:left;">
-    <li><a href="javascript:player1.reverse = !player1.reverse">reverse</a></li>
-    <li><a href="javascript:player1.restoreDefault()">Restore Default</a></li>
-</ol>
-
-<ol class="player2Controls" style="float: right;">
-    <li><a href="javascript:player2.reverse = !player2.reverse">reverse</a></li>
-    <li><a href="javascript:player2.restoreDefault()">Restore Default</a></li>
-</ol>
-<div class="stage">
+<body onload="writeOptions(player1, 'player1Instructions', 'player1Animations')">
+<ul class="stepFrame">
+    <li><a href="javascript:ani.engine.start(prompt('Enter Frames Per Second:'))">FPS</a></li>
+    <li><a href="javascript:ani.engine.stop()">Stop</a></li>
+    <li><a href="javascript:ani.engine.step()">Step</a></li>
+</ul>
+<div class="strike"></div>
+<div class="weakSpot high"></div>
+<div class="weakSpot mid"></div>
+<div class="weakSpot low"></div>
+<div class="block">
+    <div>Instructions</div>
+    <ol class="player1Instructions">
+    </ol>
+</div>
+<div class="block">
+    <div>Animations</div>
+    <ol class="player1Animations">
+        <li><a href="javascript:player1.reverse = !player1.reverse">reverse</a></li>
+        <li><a href="javascript:player1.restoreDefault()">Restore Default</a></li>
+    </ol>
+    <div class="player2 black"></div>
     <div class="player1"></div>
-    <div class="player2"></div>
 </div>
 </body>
 </html>
