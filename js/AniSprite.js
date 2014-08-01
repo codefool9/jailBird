@@ -90,11 +90,12 @@
         return api;
     }();
     function AniSprite(clsName, character, actions) {
-        var self = this, y = 100, x = 100, ground = 500, reverse = false, frames = character.frames, defaultAni = frames.stance, target = defaultAni, index = 0, wait = 0, speed = 0, speedY = 0, damage = 0, friction = 0, gravity = .8, weight = 5, el, weakSpots = [];
-        function Spot(x, y, radius) {
+        var self = this, y = 100, x = 100, ground = 500, reverse = false, ducked = false, target = null, targetMaxDistance = 400, frames = character.frames, defaultAni = frames.stance, action = defaultAni, index = 0, wait = 0, speed = 0, speedY = 0, damage = 0, friction = 0, gravity = .8, weight = 5, el, weakSpots = [];
+        function Spot(x, y, radius, name) {
             this.x = x;
             this.y = y;
             this.radius = radius;
+            this.name = name;
         }
         function addNamesToActions() {
             for (var i in character.frames) {
@@ -139,7 +140,13 @@
                     return;
                 }
             }
-            if (self.index >= target.frames.length - 1) {
+            if (self.target) {
+                if (!self.isTargetInFront()) {
+                    self.play("turn");
+                    return;
+                }
+            }
+            if (self.index >= action.frames.length - 1) {
                 self.play("stance");
             }
         }
@@ -161,23 +168,29 @@
         this.__defineSetter__("index", function(val) {
             index = val;
         });
+        this.__defineGetter__("x", function() {
+            return x;
+        });
+        this.__defineSetter__("x", function(val) {
+            x = isNaN(val) ? 0 : val;
+        });
         this.__defineGetter__("y", function() {
             return y;
         });
         this.__defineSetter__("y", function(val) {
             y = isNaN(val) ? 0 : val;
         });
+        this.__defineGetter__("width", function() {
+            return action && action.frames && (action.frames[index] && action.frames[index].width || action.frames[0].width) || 0;
+        });
+        this.__defineGetter__("height", function() {
+            return action && action.frames && (action.frames[index] && action.frames[index].height || action.frames[0].height) || 0;
+        });
         this.__defineGetter__("ground", function() {
             return ground;
         });
         this.__defineSetter__("ground", function(val) {
             ground = isNaN(val) ? 0 : val;
-        });
-        this.__defineGetter__("x", function() {
-            return x;
-        });
-        this.__defineSetter__("x", function(val) {
-            x = isNaN(val) ? 0 : val;
         });
         this.__defineGetter__("reverse", function() {
             return reverse;
@@ -186,9 +199,15 @@
             val = !!val;
             if (reverse !== val) {
                 speed *= -1;
-                x += target.frames[0].width * (reverse ? -1 : 1);
+                x += action.frames[0].width * (reverse ? -1 : 1);
             }
             reverse = val;
+        });
+        this.__defineGetter__("ducked", function() {
+            return ducked;
+        });
+        this.__defineSetter__("ducked", function(val) {
+            ducked = !!val;
         });
         this.__defineGetter__("speed", function() {
             return speed;
@@ -220,6 +239,18 @@
         this.__defineSetter__("gravity", function(val) {
             gravity = val;
         });
+        this.__defineGetter__("target", function() {
+            return target;
+        });
+        this.__defineSetter__("target", function(val) {
+            target = val;
+        });
+        this.__defineGetter__("targetMaxDistance", function() {
+            return targetMaxDistance;
+        });
+        this.__defineSetter__("targetMaxDistance", function(val) {
+            targetMaxDistance = val;
+        });
         this.__defineGetter__("wait", function() {
             return wait;
         });
@@ -229,25 +260,52 @@
         this.__defineSetter__("defaultAni", function(val) {
             defaultAni = val;
         });
+        this.getDistanceToTarget = function() {
+            var t = {
+                x: self.target.x + self.target.width * .5,
+                y: self.target.y + self.target.height * .5
+            }, s = {
+                x: self.x + self.width * .5,
+                y: self.y + self.height * .5
+            };
+            return distanceBetweenPoints(s, t);
+        };
+        this.isTargetInRange = function() {
+            var dist = self.getDistanceToTarget();
+            return dist <= targetMaxDistance;
+        };
+        this.isTargetInFront = function() {
+            if (self.target) {
+                if (self.target) {
+                    if (self.target.x < x + self.width * .5 && !self.reverse) {
+                        return false;
+                    } else if (self.target.x > x - self.width * .5 && self.reverse) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        };
         this.play = function(name) {
-            if (frames[name] === target) {
+            if (frames[name] === action) {
                 return;
             }
             if (frames[name] && y < ground && !frames[name].inAir) {
                 return;
             }
-            if (target.frames[index] && target.frames[index].immune) {
+            if (action.frames[index] && action.frames[index].immune) {
                 return;
             }
-            target = frames[name] || frames.stance;
+            action = frames[name] || frames.stance;
             index = 0;
             wait = 0;
         };
         this.restoreDefault = function() {
             defaultAni = frames.stance;
         };
-        this.createSpot = function(x, y, radius) {
-            return new Spot(x, y, radius);
+        this.createSpot = function(x, y, radius, name) {
+            return new Spot(x, y, radius, name);
         };
         this.strike = function(action, frame, x, y, radius) {
             if (!this.reverse) {
@@ -274,19 +332,27 @@
             this.dispatch("weakSpots", action.name, spots);
         };
         this.checkHit = function(hitSpot, dmg, spd) {
-            var i = 0, len = weakSpots.length, spot, dist;
+            var i = 0, len = weakSpots.length, spot, dist = 0, lastDist = 100, selected = -1, name;
             while (i < len) {
                 spot = weakSpots[i];
                 dist = distanceBetweenPoints(hitSpot, spot);
-                if (dist < hitSpot.radius + spot.radius) {
-                    damage += dmg;
-                    speed += reverse ? spd : -spd;
-                    friction = .25;
-                    return true;
+                if (dist < hitSpot.radius + spot.radius && dist < lastDist) {
+                    selected = i;
                 }
+                lastDist = dist;
                 i += 1;
             }
-            return false;
+            if (selected !== -1) {
+                damage += dmg;
+                speed += reverse ? spd : -spd;
+                friction = .25;
+                name = typeof weakSpots[selected].name === "function" ? weakSpots[selected].name(dmg, spd) : weakSpots[selected].name;
+                if (name) {
+                    this.play(name);
+                }
+                return;
+            }
+            return;
         };
         function distanceBetweenPoints(p1, p2) {
             var xs = 0, ys = 0;
@@ -298,29 +364,29 @@
         }
         function update() {
             var t, f, fms, depIndex, dep;
-            if (target.dependencies) {
+            if (action.dependencies) {
                 depIndex = 0;
                 fms = [];
-                while (depIndex < target.dependencies.length) {
-                    if (typeof target.dependencies[depIndex] === "function") {
-                        dep = target.dependencies[depIndex]();
+                while (depIndex < action.dependencies.length) {
+                    if (typeof action.dependencies[depIndex] === "function") {
+                        dep = action.dependencies[depIndex]();
                     } else {
-                        dep = target.dependencies[depIndex];
+                        dep = action.dependencies[depIndex];
                     }
                     if (dep) {
-                        fms = fms.concat.apply(fms, frames[target.dependencies[depIndex]].frames);
+                        fms = fms.concat.apply(fms, frames[action.dependencies[depIndex]].frames);
                     }
                     depIndex += 1;
                 }
-                fms = fms.concat.apply(fms, target.frames);
+                fms = fms.concat.apply(fms, action.frames);
             } else {
-                t = target;
+                t = action;
                 fms = t.frames;
             }
             if (!fms[index]) {
                 index = 0;
                 wait = 0;
-                t = target;
+                t = action;
                 fms = t.frames;
             }
             f = fms[index];

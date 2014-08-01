@@ -10,8 +10,13 @@ var player1 = ani.jailBird('player1', {
         letter: 'A',
         key: 65,
         action: function () {
-            player1.reverse = true;
-            player1.play('walk');
+            if (!player1.reverse && player1.isTargetInFront() && player1.isTargetInRange()) {
+                player1.play("walkBackward");
+            } else if (!player1.reverse) {
+                player1.play('turn');
+            } else {
+                player1.play('walk');
+            }
         }
     },
     duck: {
@@ -25,8 +30,13 @@ var player1 = ani.jailBird('player1', {
         letter: 'D',
         key: 68,
         action: function () {
-            player1.reverse = false;
-            player1.play('walk');
+            if (player1.reverse && player1.isTargetInFront() && player1.isTargetInRange()) {
+                player1.play("walkBackward");
+            } else if (player1.reverse) {
+                player1.play('turn');
+            } else {
+                player1.play('walk');
+            }
         }
     },
     blockHigh: {
@@ -162,11 +172,7 @@ player1.on('strike', function (event, name, spot) {
         damage = 20;
         momentum = 20;
     }
-    if (player2.checkHit(spot, damage, momentum)) {
-        player2.play('hitFace');
-        player2.damage += damage;
-        player2.momentum = momentum;
-    }
+    player2.checkHit(spot, damage, momentum);
 });
 
-player1.ground = 200;
+player1.ground = 210;
