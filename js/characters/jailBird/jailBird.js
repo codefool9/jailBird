@@ -4,7 +4,9 @@
 */
 (function(exports, global){
 exports.jailBird = function(clsName, actions) {
-    var plr, defaultWidth = 79, defaultHeight = 106, walkSpeed = 10, stay = function() {
+    var plr, defaultWidth = 79, defaultHeight = 106, walkSpeed = 10, stop = function() {
+        plr.speed = 0;
+    }, stay = function() {
         plr.index -= 1;
     }, moveBy = function(n) {
         plr.x += plr.reverse ? -n : n;
@@ -500,6 +502,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         blockHigh: {
+            start: stop,
             frames: [ {
                 x: -2533,
                 y: -483,
@@ -519,6 +522,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         blockLow: {
+            start: stop,
             frames: [ {
                 x: -2703,
                 y: -507,
@@ -557,6 +561,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         lightPunch: {
+            start: stop,
             frames: [ {
                 x: -20,
                 y: -1051,
@@ -592,6 +597,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         "knife-lightPunch": {
+            start: stop,
             frames: [ {
                 x: -352,
                 y: -1053,
@@ -627,6 +633,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         lowKick: {
+            start: stop,
             frames: [ {
                 x: -692,
                 y: -1049,
@@ -667,6 +674,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         hardPunch: {
+            start: stop,
             frames: [ {
                 x: -952,
                 y: -1053,
@@ -716,6 +724,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         medPunch: {
+            start: stop,
             frames: [ {
                 x: -1552,
                 y: -1053,
@@ -747,6 +756,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         medKick: {
+            start: stop,
             frames: [ {
                 x: -2066,
                 y: -1050,
@@ -773,6 +783,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         hardPunch2: {
+            start: stop,
             frames: [ {
                 x: -12,
                 y: -1246,
@@ -819,6 +830,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         "knife-hardPunch": {
+            start: stop,
             frames: [ {
                 x: -845,
                 y: -1242,
@@ -855,6 +867,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         hardKick: {
+            start: stop,
             frames: [ {
                 x: -1463,
                 y: -1237,
@@ -965,6 +978,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         hitFace: {
+            start: stop,
             frames: [ {
                 x: -162,
                 y: -674,
@@ -1022,6 +1036,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         hitGut: {
+            start: stop,
             frames: [ {
                 x: -522,
                 y: -676,
@@ -1066,6 +1081,7 @@ exports.jailBird = function(clsName, actions) {
             } ]
         },
         duckHitFace: {
+            start: stop,
             frames: [ {
                 x: -895,
                 y: -698,
