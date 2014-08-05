@@ -11,7 +11,12 @@ exports.jailBird = function(clsName, actions) {
     }, moveBy = function(n) {
         plr.x += plr.reverse ? -n : n;
     }, defaultWeakSpots = function(action) {
-        var spots = [ plr.createSpot(this.width * .5, 20, 20, "hitFace"), plr.createSpot(this.width * .5, this.height * .5, 20, "hitGut"), plr.createSpot(this.width * .5, this.height - 20, 20, function(damage, momentum) {
+        var spots = [ plr.createSpot(this.width * .5, 20, 20, function(damage, momentum) {
+            if (momentum > 10) {
+                return "hitFaceUp";
+            }
+            return "hitFace";
+        }), plr.createSpot(this.width * .5, this.height * .5, 20, "hitGut"), plr.createSpot(this.width * .5, this.height - 20, 20, function(damage, momentum) {
             if (momentum > 10) {
                 return "trip";
             }
@@ -1111,6 +1116,132 @@ exports.jailBird = function(clsName, actions) {
                 y: -698,
                 width: 75,
                 height: 81
+            } ]
+        },
+        hitFaceUp: {
+            frames: [ {
+                x: -1250,
+                y: -651,
+                width: 65,
+                height: 123
+            }, {
+                x: -1315,
+                y: -665,
+                width: 84,
+                height: 109,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -1405,
+                y: -664,
+                width: 114,
+                height: 104,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -1523,
+                y: -663,
+                width: 136,
+                height: 96,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -1664,
+                y: -670,
+                width: 144,
+                height: 69,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -1824,
+                y: -655,
+                width: 108,
+                height: 91,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -2055,
+                y: -688,
+                width: 105,
+                height: 78,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -2171,
+                y: -703,
+                width: 137,
+                height: 68,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -2318,
+                y: -727,
+                width: 145,
+                height: 41,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -2479,
+                y: -729,
+                width: 139,
+                height: 42,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -2625,
+                y: -723,
+                width: 128,
+                height: 48,
+                before: function() {
+                    moveBy(5);
+                }
+            }, {
+                x: -2479,
+                y: -729,
+                width: 139,
+                height: 42,
+                after: function() {
+                    plr.play("getUp");
+                    plr.index = 0;
+                    plr.wait = 0;
+                }
+            } ]
+        },
+        getUp: {
+            frames: [ {
+                x: -18,
+                y: -907,
+                width: 118,
+                height: 49
+            }, {
+                x: -142,
+                y: -904,
+                width: 110,
+                height: 49
+            }, {
+                x: -274,
+                y: -900,
+                width: 98,
+                height: 50
+            }, {
+                x: -399,
+                y: -883,
+                width: 69,
+                height: 71
+            }, {
+                x: -485,
+                y: -862,
+                width: 77,
+                height: 88
             } ]
         }
     };
