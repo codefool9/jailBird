@@ -1,3 +1,19 @@
+// blockHigh: backingUp + hit
+// blockLow: backup + down + hit
+// lightPunch: e
+// jump: w
+// walkLeft: a
+// walkRight: d
+// duck: s
+// hardPunch: leftShift + e
+// knife-lightPunch: lightPunch + knife
+// knife-hardPunch: hardPunch + knife
+// lowKick: c
+// spinKick: v
+// medKick: leftShift + c
+// hardKick: leftShift + v
+// hardPunch2: f
+
 var player1 = ani.jailBird('player1', {
     jump: {
         letter: 'W',
@@ -155,7 +171,7 @@ var player1 = ani.jailBird('player1', {
 });
 
 player1.on('strike', function (event, name, spot) {
-    var damage = 0, momentum = 0, strike = document.getElementsByClassName('strike')[0];
+    var damage = 0, momentum = 0, strike = document.getElementsByClassName('strike')[0], opponent = player1.target;
     posSpot(strike, spot);
 
     //TODO: need to implement damage and momentum for each action here.
@@ -171,8 +187,45 @@ player1.on('strike', function (event, name, spot) {
     } else if (name === "knifeHardPunch") {
         damage = 20;
         momentum = 20;
+    } else if (name === "hardPunch2") {
+        damage = 25;
+        momentum = 40;
+    } else if (name === "hardKick") {
+        damage = 25;
+        momentum = 30 ;
+    } else if (name === "lightKick") {
+        damage = 15;
+        momentum = 10;
+    } else if (name === "knifeLightPunch") {
+        damage = 15;
+        momentum = 10;
     }
-    player2.checkHit(spot, damage, momentum);
+    opponent.checkHit(spot, damage, momentum);
+    var lifeRemaining = opponent.damage/opponent.life;
+    var percent = lifeRemaining * 100;
+    console.log ("percent " + percent);
+    console.log("lifeRemaining " + opponent.damage + "/" + opponent.life + " = " + lifeRemaining);
+
+    if (opponent.damage > opponent.life) {
+        console.log("player1 wins");
+        opponent.damage = opponent.life;
+    } else {
+
+    }
+    document.getElementsByClassName('player2Health')[0].children[0].style.width = percent + "%";
+});
+
+player1.on('weakSpots', function (event, name, spots) {
+    var i = 0, spot, el = document.getElementsByClassName('weakSpot'), len = el.length;
+    while (i < len) {
+        spot = spots[i];
+        if (spot) {
+            posSpot(el[i], spot);
+        } else {
+            posSpot(el[i], {x:0, y:0, radius:0, name:''})
+        }
+        i += 1;
+    }
 });
 
 player1.ground = 210;

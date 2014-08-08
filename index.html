@@ -35,10 +35,46 @@
                 animations.innerHTML += "<li>" + i + "</li>";
             }
         }
+
+        function getBackground () {
+            var backgrounds = [
+                "images/backgrounds/background1.gif",
+                "images/backgrounds/background2.gif",
+                "images/backgrounds/background3.gif",
+                "images/backgrounds/background4.gif",
+                "images/backgrounds/background5.gif",
+                "images/backgrounds/background6.gif",
+                "images/backgrounds/background7.gif",
+                "images/backgrounds/background8.gif",
+                "images/backgrounds/background9.gif",
+                "images/backgrounds/background10.gif",
+                "images/backgrounds/background11-1.gif",
+                "images/backgrounds/background11-2.gif",
+                "images/backgrounds/background12-1.gif",
+                "images/backgrounds/background12-2.gif",
+                "images/backgrounds/background13-1.gif",
+                "images/backgrounds/background13-2.gif",
+                "images/backgrounds/background14-1.gif",
+                "images/backgrounds/background14-2.gif",
+                "images/backgrounds/background15-1.gif",
+                "images/backgrounds/background15-2.gif",
+            ];
+            var index = Math.random() * backgrounds.length;
+            index = Math.floor(index);
+            console.log(backgrounds[index]);
+            console.log(index)
+            document.getElementsByClassName('stage')[0].style.background = "url(" + backgrounds[index] + ")";
+        }
     </script>
 </head>
-<body onload="writeOptions(player1, 'player1Instructions', 'player1Animations')">
+<body onload="writeOptions(player1, 'player1Instructions', 'player1Animations');getBackground()">
 <div class="stage">
+    <div class="player1Health">
+        <div class="bar"></div>
+    </div>
+    <div class="player2Health">
+        <div class="bar"></div>
+    </div>
     <div class="player2 black"></div>
     <div class="player1"></div>
 </div>
